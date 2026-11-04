@@ -15,6 +15,7 @@ import { Card } from '@/components/Misc';
 import { BackButton, Screen, ScreenHeader, StickyFooter } from '@/components/Screen';
 import { ErrorView, LoadingView } from '@/components/States';
 import { Text } from '@/components/Text';
+import { BoxCheck } from '@/features/returns/BoxCheck';
 import { isActiveReturn, returnOrderRef, returnTitle } from '@/features/returns/utils';
 import { useReturn } from '@/hooks/queries';
 import { dateTime, returnReasonLabel, returnStatusLabel } from '@/lib/format';
@@ -108,6 +109,8 @@ function CodeView({ rr }: { rr: ReturnRequest }) {
           </View>
         </View>
 
+        <View style={{ paddingHorizontal: spacing.screen }}><BoxCheck rr={rr} /></View>
+
         <Text size={12} color={colors.muted} align="center" style={styles.footnote}>
           The unlock code changes every day. Open this screen at the box to see today&apos;s code.
         </Text>
@@ -174,6 +177,8 @@ function ReceivedView({ rr }: { rr: ReturnRequest }) {
         ))}
         <Text size={13} color={colors.body}>Reason: {returnReasonLabel[rr.reason]}</Text>
       </Card>
+
+      <BoxCheck rr={rr} />
 
       <Card style={styles.timeline}>
         {steps.map((s) => (

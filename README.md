@@ -126,6 +126,9 @@ npx eas-cli@latest submit --platform ios
 - `POST /returns` now checks that the order belongs to the caller (account or guest session);
   before, anyone could open a return on any order id. It also flags every returned item on the
   order as `isRefundRequested`, not only the first.
+- Free SmartBox drop-off check: every box photo is checked with the box weight and a local CLIP
+  image model (no API cost). The result shows on the return screen ("Item verified by the
+  SmartBox" or "sent for manual review") and in the admin Camera Sessions page.
 - Signing in now also moves the guest's return requests into the account (orders, cart and
   wishlist were already merged).
 

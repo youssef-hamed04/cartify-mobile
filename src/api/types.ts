@@ -135,7 +135,18 @@ export interface ReturnRequest {
   expiresAt: string;
   completedAt?: string | null;
   processedByBox?: string | null;
+  imageUploadedAt?: string | null;
+  verification?: ReturnVerification | null;
   createdAt: string;
+}
+
+// SmartBox drop-off check computed by the backend (weight + image)
+export interface ReturnVerification {
+  verdict: 'processing' | 'match' | 'review' | 'error';
+  reasons: string[];
+  visual?: { score: number | null; passed: boolean | null; topLabel: string | null };
+  weight?: { measured: number | null; expected: number | null; passed: boolean | null };
+  checkedAt?: string | null;
 }
 
 export interface CreateReturnInput {
