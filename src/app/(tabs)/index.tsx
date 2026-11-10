@@ -59,6 +59,9 @@ export default function HomeScreen() {
           <Text size={26} weight="bold" tracking={-0.52} numberOfLines={1}>{name ? `Hi, ${name}` : 'Welcome to Cartify'}</Text>
         </View>
         <View style={styles.actions}>
+          <Pressable onPress={() => router.push('/assistant')} style={styles.bell} accessibilityRole="button" accessibilityLabel="Cartify Assistant">
+            <Sparkles size={20} color={colors.navy} />
+          </Pressable>
           <Pressable onPress={() => router.push('/notifications')} style={styles.bell} accessibilityRole="button" accessibilityLabel="Notifications">
             <Bell size={20} color={colors.ink} />
           </Pressable>

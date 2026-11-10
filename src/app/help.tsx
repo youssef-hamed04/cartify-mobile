@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { ChevronDown, ChevronUp, CreditCard, Mail, Search, Truck, Undo2, UserRound, type LucideIcon } from 'lucide-react-native';
+import { ChevronDown, ChevronUp, CreditCard, Mail, Search, Sparkles, Truck, Undo2, UserRound, type LucideIcon } from 'lucide-react-native';
 import { Screen, ScreenHeader } from '@/components/Screen';
 import { Text } from '@/components/Text';
 import { TextField } from '@/components/TextField';
@@ -81,6 +81,14 @@ export default function Help() {
           );
         })}
       </View>
+
+      <Pressable onPress={() => router.push('/assistant')} style={styles.chat} accessibilityRole="button">
+        <View style={styles.chatIcon}><Sparkles size={20} color={colors.white} /></View>
+        <View style={{ flex: 1 }}>
+          <Text size={15} weight="bold" color={colors.white}>Ask Cartify Assistant</Text>
+          <Text size={12} color="rgba(255,255,255,0.8)">Find products, check your cart and track orders</Text>
+        </View>
+      </Pressable>
 
       <Pressable
         onPress={() => Linking.openURL(`mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent('Cartify app support')}`)}

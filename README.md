@@ -16,6 +16,14 @@ It uses the existing Cartify backend (`../cartify-backend-mqtt-main`) and follow
 | UI | Space Grotesk, lucide icons, expo-image, expo-linear-gradient |
 | Smart returns | react-native-maps, expo-location, react-native-qrcode-svg, view-shot + expo-sharing |
 
+## AI shopping assistant
+
+`src/app/assistant.tsx` is a chat screen for the Cartify Assistant (backend `/assistant/*`). It is
+opened from the ✨ button in the Home header or from Help Center → *Ask Cartify Assistant*.
+Recommended products are shown with the app's own `ProductCard`. Comparison, cart and order cards
+use live data, and the AI's text is labelled. Adding to the cart happens only when the customer
+presses **Confirm**. The AI key stays on the backend. See `cartify-backend/docs/AI_FEATURES.md`.
+
 ## Project layout
 
 ```

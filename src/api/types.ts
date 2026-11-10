@@ -188,3 +188,26 @@ export interface Locker {
   hours: string;
   freeSlots: number;
 }
+
+// ── AI shopping assistant (/assistant) ───────────────────────────────────────
+// Blocks are structured data from the backend tools (live catalog / cart / order data);
+// `text` is written by the AI model and labelled as such in the UI.
+export interface AssistantCard {
+  id: string; name: string; brand: string | null; category: string;
+  price: number; oldPrice: number | null; discount: number; rating: number; reviews: number;
+  image: string; defaultColor: string | null; colors: string[]; variantCount: number; inStock: boolean;
+}
+export type AssistantBlock =
+  | { type: 'products'; title: string | null; products: AssistantCard[]; fullProducts?: Product[] }
+  | { type: 'comparison'; products: (AssistantCard & { inStockColors: string[]; description: string })[] }
+  | { type: 'cart'; items: { productId: string; name: string; color: string; quantity: number; unitPrice: number; lineTotal: number; image: string }[]; totalQuantity: number; subtotal: number }
+  | { type: 'order'; order: { orderId: string; orderNumber: string; status: OrderStatus; statusLabel: string; total: number; itemCount: number; items: string[]; trackingNumber: string | null; history: { status: OrderStatus; label: string; at: string }[] } }
+  | { type: 'confirm_action'; actionId: string; kind: 'add_to_cart'; title: string; summary: string; product: AssistantCard; color: string; quantity: number; lineTotal: number };
+
+export interface AssistantPendingAction { actionId: string; type: string; summary: string; expiresAt: string }
+export interface AssistantChatResponse {
+  conversationId: string;
+  reply: { text: string; blocks: AssistantBlock[]; aiGenerated: true };
+  pendingActions: AssistantPendingAction[];
+}
+export interface AssistantTranscriptEntry { role: 'user' | 'assistant' | 'system'; text: string; blocks?: AssistantBlock[]; ok?: boolean; at: string }

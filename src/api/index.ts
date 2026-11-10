@@ -1,7 +1,8 @@
 import { api } from './client';
 import type {
-  AddToCartResponse, CartResponse, Category, CreateOrderInput, CreateReturnInput, Locker, Order,
-  Paginated, Product, ReturnRequest, Review, UpdateProfileInput, User, WishlistItem,
+  AddToCartResponse, AssistantChatResponse, AssistantPendingAction, AssistantTranscriptEntry, CartResponse, Category,
+  CreateOrderInput, CreateReturnInput, Locker, Order, Paginated, Product, ReturnRequest, Review, UpdateProfileInput, User,
+  WishlistItem,
 } from './types';
 
 export * from './types';
@@ -80,4 +81,17 @@ export const returnsApi = {
 
 export const lockersApi = {
   list: () => api<{ lockers: Locker[] }>('/lockers'),
+};
+
+// AI shopping assistant. The AI provider key stays on the backend; the app only sends messages.
+export const assistantApi = {
+  status: () => api<{ enabled: boolean }>('/assistant/status'),
+  chat: (message: string, conversationId?: string | null) =>
+    api<AssistantChatResponse>('/assistant/chat', { method: 'POST', body: { message, ...(conversationId ? { conversationId } : {}) } }),
+  conversation: (id: string) =>
+    api<{ conversationId: string; transcript: AssistantTranscriptEntry[]; pendingActions: AssistantPendingAction[] }>(`/assistant/conversations/${id}`),
+  confirm: (actionId: string, conversationId: string) =>
+    api<{ status: string; result: { message: string } }>(`/assistant/actions/${actionId}/confirm`, { method: 'POST', body: { conversationId } }),
+  cancel: (actionId: string, conversationId: string) =>
+    api<{ status: string; result: { message: string } }>(`/assistant/actions/${actionId}/cancel`, { method: 'POST', body: { conversationId } }),
 };
