@@ -164,7 +164,7 @@ export default function AssistantScreen() {
         keyboardShouldPersistTaps="handled"
         onContentSizeChange={scrollToEnd}
         renderItem={({ item }) => {
-          if (item.id === 'typing') return <View style={[styles.bubble, styles.ai]}><Text color={colors.muted}>Thinking…</Text></View>;
+          if (item.id === 'typing') return <View style={[styles.bubble, styles.ai]}><Text color={colors.muted}>Looking through the catalog… this can take up to a minute.</Text></View>;
           if (item.role === 'user') return <View style={[styles.bubble, styles.user]}><Text size={15} color={colors.white} lineHeight={21}>{item.text}</Text></View>;
           if (item.role === 'system') {
             return (

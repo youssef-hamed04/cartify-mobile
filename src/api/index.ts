@@ -83,15 +83,17 @@ export const lockersApi = {
   list: () => api<{ lockers: Locker[] }>('/lockers'),
 };
 
-// AI shopping assistant. The AI provider key stays on the backend; the app only sends messages.
+// AI shopping assistant. It runs on a local open-source model on the Cartify server, which can take
+// a minute or more per answer on a CPU, so these calls get a long timeout.
+const AI_TIMEOUT_MS = 5 * 60_000;
 export const assistantApi = {
   status: () => api<{ enabled: boolean }>('/assistant/status'),
   chat: (message: string, conversationId?: string | null) =>
-    api<AssistantChatResponse>('/assistant/chat', { method: 'POST', body: { message, ...(conversationId ? { conversationId } : {}) } }),
+    api<AssistantChatResponse>('/assistant/chat', { method: 'POST', body: { message, ...(conversationId ? { conversationId } : {}) }, timeoutMs: AI_TIMEOUT_MS }),
   conversation: (id: string) =>
     api<{ conversationId: string; transcript: AssistantTranscriptEntry[]; pendingActions: AssistantPendingAction[] }>(`/assistant/conversations/${id}`),
   confirm: (actionId: string, conversationId: string) =>
-    api<{ status: string; result: { message: string } }>(`/assistant/actions/${actionId}/confirm`, { method: 'POST', body: { conversationId } }),
+    api<{ status: string; result: { message: string } }>(`/assistant/actions/${actionId}/confirm`, { method: 'POST', body: { conversationId }, timeoutMs: 60_000 }),
   cancel: (actionId: string, conversationId: string) =>
     api<{ status: string; result: { message: string } }>(`/assistant/actions/${actionId}/cancel`, { method: 'POST', body: { conversationId } }),
 };

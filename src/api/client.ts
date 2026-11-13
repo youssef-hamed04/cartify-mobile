@@ -31,6 +31,7 @@ interface RequestOptions {
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
   body?: unknown;
   query?: Query;
+  timeoutMs?: number; // overrides the default 20 s (the local AI assistant can take longer)
 }
 
 const toQueryString = (query?: Query) => {
@@ -41,7 +42,7 @@ const toQueryString = (query?: Query) => {
   return params.length ? `?${params.join('&')}` : '';
 };
 
-export async function api<T>(path: string, { method = 'GET', body, query }: RequestOptions = {}): Promise<T> {
+export async function api<T>(path: string, { method = 'GET', body, query, timeoutMs = TIMEOUT_MS }: RequestOptions = {}): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' };
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   const token = session.getToken();
@@ -50,7 +51,7 @@ export async function api<T>(path: string, { method = 'GET', body, query }: Requ
   if (sid && !token) headers['X-Session-Id'] = sid;
 
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   let res: Response;
   try {
     res = await fetch(`${API_URL}${path}${toQueryString(query)}`, {

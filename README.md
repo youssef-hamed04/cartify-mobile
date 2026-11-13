@@ -22,7 +22,9 @@ It uses the existing Cartify backend (`../cartify-backend-mqtt-main`) and follow
 opened from the ✨ button in the Home header or from Help Center → *Ask Cartify Assistant*.
 Recommended products are shown with the app's own `ProductCard`. Comparison, cart and order cards
 use live data, and the AI's text is labelled. Adding to the cart happens only when the customer
-presses **Confirm**. The AI key stays on the backend. See `cartify-backend/docs/AI_FEATURES.md`.
+presses **Confirm**. The assistant runs on a free, open-source model hosted with the backend (Ollama), so
+the app holds no AI keys; answers can take up to a minute on a CPU-only server, so these requests use a
+longer timeout. See `cartify-backend/docs/AI_FEATURES.md`.
 
 ## Project layout
 
