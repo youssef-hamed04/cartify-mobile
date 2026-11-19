@@ -211,3 +211,43 @@ export interface AssistantChatResponse {
   pendingActions: AssistantPendingAction[];
 }
 export interface AssistantTranscriptEntry { role: 'user' | 'assistant' | 'system'; text: string; blocks?: AssistantBlock[]; ok?: boolean; at: string }
+
+export type ListingType = 'sale' | 'rent';
+export type PropertyType = 'apartment' | 'studio' | 'duplex' | 'penthouse' | 'villa' | 'chalet' | 'shop' | 'office' | 'land';
+export type Finishing = 'none' | 'semi' | 'super-lux' | 'ultra-lux';
+export type PropertyView = 'street' | 'garden' | 'nile' | 'sea';
+export type Amenity = 'parking' | 'security' | 'garden' | 'pool' | 'gas' | 'ac';
+export type PropertyStatus = 'pending' | 'approved' | 'rejected' | 'sold' | 'rented' | 'archived';
+export interface EstateLocations {
+  cities: { slug: string; nameEn: string; nameAr: string; districts: { slug: string; nameEn: string; nameAr: string; views: PropertyView[] }[] }[];
+  propertyTypes: PropertyType[]; finishing: Finishing[]; views: PropertyView[]; amenities: Amenity[]; dataNote: string;
+}
+export interface EstimateInput {
+  listingType: ListingType; propertyType: PropertyType; city: string; district: string; area: number;
+  rooms: number; bathrooms: number; floor: number; hasElevator: boolean; buildingAge: number;
+  finishing: Finishing; furnished: boolean; view: PropertyView;
+}
+export interface PriceEstimate {
+  price: number; pricePerM2: number; low: number; high: number; method: 'ml' | 'comparables'; model: string;
+  comparablesCount?: number; currency?: 'EGP'; period?: 'total' | 'month';
+  verdict?: 'below_market' | 'fair' | 'above_market'; diffPercent?: number;
+}
+export interface EstateProperty extends EstimateInput {
+  _id: string; title: string; description: string; address: string; amenities: Amenity[]; price: number;
+  images: { url: string; publicId: string }[]; status: PropertyStatus; estimate?: PriceEstimate;
+  views: number; owner: { firstName: string; lastName: string }; createdAt: string;
+  contactPhone?: string; contactHidden?: boolean; rejectionReason?: string;
+}
+export interface PropertyInput extends EstimateInput {
+  title: string; description: string; address: string; amenities: Amenity[]; price: number; contactPhone: string;
+}
+export interface EstateQuery {
+  listingType?: ListingType; propertyType?: PropertyType; city?: string; district?: string;
+  minPrice?: number; maxPrice?: number; minArea?: number; maxArea?: number; rooms?: number;
+  finishing?: Finishing; q?: string; sort?: 'newest' | 'price_asc' | 'price_desc' | 'area_desc' | 'best_deal'; page?: number; limit?: number;
+}
+export interface EstatePage { properties: EstateProperty[]; total: number; page: number; pages: number }
+export interface EstateMarket {
+  districts: { city: string; district: string; avgPerM2: number; medianPerM2: number; count: number }[];
+  cities: { city: string; avgPerM2: number; count: number }[]; dataNote: string;
+}

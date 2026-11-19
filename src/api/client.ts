@@ -43,8 +43,16 @@ const toQueryString = (query?: Query) => {
 };
 
 export async function api<T>(path: string, { method = 'GET', body, query, timeoutMs = TIMEOUT_MS }: RequestOptions = {}): Promise<T> {
+  return request<T>(path, { method, body, query, timeoutMs });
+}
+
+export function apiForm<T>(path: string, body: FormData, options: Pick<RequestOptions, 'method' | 'timeoutMs'> = {}) {
+  return request<T>(path, { ...options, method: options.method ?? 'POST', body }, true);
+}
+
+async function request<T>(path: string, { method = 'GET', body, query, timeoutMs = TIMEOUT_MS }: RequestOptions, multipart = false): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' };
-  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (body !== undefined && !multipart) headers['Content-Type'] = 'application/json';
   const token = session.getToken();
   if (token) headers.Authorization = `Bearer ${token}`;
   const sid = session.getSessionId();
@@ -57,7 +65,7 @@ export async function api<T>(path: string, { method = 'GET', body, query, timeou
     res = await fetch(`${API_URL}${path}${toQueryString(query)}`, {
       method,
       headers,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body: multipart ? body as FormData : body !== undefined ? JSON.stringify(body) : undefined,
       credentials: 'omit', // auth travels in headers, never in cookies
       signal: controller.signal,
     });
