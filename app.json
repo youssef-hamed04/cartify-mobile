@@ -37,6 +37,14 @@
       "expo-image",
       "expo-sharing",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "Cartify uses your selected photos to illustrate your property listing.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/splash-icon.png",

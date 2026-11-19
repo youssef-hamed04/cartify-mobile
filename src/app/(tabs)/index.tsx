@@ -101,6 +101,12 @@ export default function HomeScreen() {
         <View style={styles.discount}><Text size={22} weight="bold" color={colors.white}>%</Text></View>
       </LinearGradient>
 
+      <Pressable onPress={() => router.push('/real-estate')} accessibilityRole="button" accessibilityLabel="Real Estate in Dakahlia" style={[styles.why, { marginTop: 24, minHeight: 100 }]}>
+        <Text size={22} weight="bold" color={colors.navy}>Real Estate</Text>
+        <Text color={colors.body}>Find your place in Dakahlia. Browse properties for sale or rent and estimate market prices.</Text>
+        <Text weight="bold" color={colors.navy}>Explore properties →</Text>
+      </Pressable>
+
       {/* Category chips */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.bleed} contentContainerStyle={styles.chips}>
         {(categories.data ?? []).map((c, i) => {
