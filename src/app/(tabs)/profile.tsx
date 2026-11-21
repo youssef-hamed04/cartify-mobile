@@ -27,6 +27,7 @@ export default function Profile() {
     ]);
 
   const menu: { label: string; Icon: LucideIcon; onPress: () => void }[] = [
+    { label: 'My properties', Icon: MapPin, onPress: () => router.push('/real-estate/mine') },
     { label: 'My Orders', Icon: Package, onPress: () => router.push('/orders') },
     { label: 'Smart Returns', Icon: Undo2, onPress: () => router.push('/returns') },
     { label: 'Wishlist', Icon: Heart, onPress: () => router.push('/wishlist') },

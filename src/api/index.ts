@@ -1,8 +1,9 @@
-import { api } from './client';
+import { api, apiForm } from './client';
 import type {
   AddToCartResponse, AssistantChatResponse, AssistantPendingAction, AssistantTranscriptEntry, CartResponse, Category,
   CreateOrderInput, CreateReturnInput, Locker, Order, Paginated, Product, ReturnRequest, Review, UpdateProfileInput, User,
-  WishlistItem,
+  WishlistItem, EstateLocations, EstateMarket, EstatePage, EstateProperty, EstateQuery,
+  EstimateInput, ListingType, PriceEstimate, PropertyInput,
 } from './types';
 
 export * from './types';
@@ -96,4 +97,19 @@ export const assistantApi = {
     api<{ status: string; result: { message: string } }>(`/assistant/actions/${actionId}/confirm`, { method: 'POST', body: { conversationId }, timeoutMs: 60_000 }),
   cancel: (actionId: string, conversationId: string) =>
     api<{ status: string; result: { message: string } }>(`/assistant/actions/${actionId}/cancel`, { method: 'POST', body: { conversationId } }),
+};
+
+export const realEstateApi = {
+  locations: () => api<EstateLocations>('/real-estate/locations'),
+  estimate: (body: EstimateInput) => api<{ estimate: PriceEstimate }>('/real-estate/estimate', { method: 'POST', body }),
+  market: (listingType: ListingType) => api<EstateMarket>('/real-estate/market', { query: { listingType } }),
+  list: (query: EstateQuery = {}) => api<EstatePage>('/real-estate/properties', { query: { ...query } }),
+  get: (id: string) => api<{ property: EstateProperty }>(`/real-estate/properties/${encodeURIComponent(id)}`),
+  mine: () => api<{ properties: EstateProperty[] }>('/real-estate/my-properties'),
+  create: (body: FormData) => apiForm<{ property: EstateProperty }>('/real-estate/properties', body),
+  update: (id: string, body: FormData | (Partial<PropertyInput> & { removeImages?: string[] })) => body instanceof FormData
+    ? apiForm<{ property: EstateProperty }>(`/real-estate/properties/${encodeURIComponent(id)}`, body, { method: 'PATCH' })
+    : api<{ property: EstateProperty }>(`/real-estate/properties/${encodeURIComponent(id)}`, { method: 'PATCH', body }),
+  status: (id: string, status: 'sold' | 'rented' | 'archived') => api<{ property: EstateProperty }>(`/real-estate/properties/${encodeURIComponent(id)}/status`, { method: 'PATCH', body: { status } }),
+  delete: (id: string) => api<{ msg: string }>(`/real-estate/properties/${encodeURIComponent(id)}`, { method: 'DELETE' }),
 };
