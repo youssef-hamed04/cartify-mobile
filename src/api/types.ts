@@ -234,7 +234,7 @@ export interface PriceEstimate {
 }
 export interface EstateProperty extends EstimateInput {
   _id: string; title: string; description: string; address: string; amenities: Amenity[]; price: number;
-  images: { url: string; publicId: string }[]; status: PropertyStatus; estimate?: PriceEstimate;
+  images: { url: string; publicId?: string }[]; status: PropertyStatus; estimate?: PriceEstimate;
   views: number; owner: { firstName: string; lastName: string }; createdAt: string;
   contactPhone?: string; contactHidden?: boolean; rejectionReason?: string;
 }

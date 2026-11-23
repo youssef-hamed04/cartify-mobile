@@ -50,7 +50,8 @@ export default function PropertyDetail() {
                   horizontal
                   pagingEnabled
                   data={p.images}
-                  keyExtractor={(item) => item.publicId}
+                  // Demo listing photos have a URL but no Cloudinary publicId
+                  keyExtractor={(item, index) => item.publicId || `${item.url}-${index}`}
                   renderItem={({ item, index }) => (
                     <Image
                       accessibilityLabel={`${p.title}, photo ${index + 1} of ${p.images.length}`}

@@ -238,8 +238,8 @@ export default function NewProperty() {
             <Text weight="bold">
               Photos ({count}/8)
             </Text>
-            {existing.map((photo) => (
-              <View key={photo.publicId} style={estateStyles.card}>
+            {existing.map((photo, index) => (
+              <View key={photo.publicId || `${photo.url}-${index}`} style={estateStyles.card}>
                 <Image
                   source={{ uri: photo.url }}
                   accessibilityLabel="Existing property photo"
@@ -249,8 +249,10 @@ export default function NewProperty() {
                   title="Remove photo"
                   variant="danger"
                   onPress={() => {
-                    setExisting((v) => v.filter((i) => i.publicId !== photo.publicId));
-                    setRemoved((v) => [...v, photo.publicId]);
+                    setExisting((v) => v.filter((i) => i !== photo));
+                    // Only Cloudinary photos (with a publicId) can be deleted on the server
+                    const { publicId } = photo;
+                    if (publicId) setRemoved((v) => [...v, publicId]);
                   }}
                 />
               </View>
